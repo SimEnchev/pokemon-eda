@@ -20,7 +20,7 @@ filepath = "pokemon.csv"
 poke_data = pd.read_csv(filepath, 
                            index_col = 'pokedex_number')
 ```
-# PART II - Descriptive Statistics
+# PART II - Descriptive Statistics and Data Cleanup
 ```
 poke_data.shape
 ```
@@ -100,4 +100,48 @@ poke_data.head(11)
 ```
 poke_data.tail(5)
 ```
+|    | name       | japanese_name   | abilities           | against_bug   | against_dark   | against_dragon   | against_electric   | against_fairy   | against_fight   | against_fire   | ... | pokedex_number   | sp_attack   | sp_defense   | speed   | type1     | type2   | weight_kg   | generation   | is_legendary   | total_power   |
+|----|------------|-----------------|---------------------|---------------|----------------|------------------|--------------------|-----------------|-----------------|----------------|-----|-----------------|-------------|--------------|---------|-----------|---------|-------------|--------------|----------------|---------------|
+| 796| Celesteela | Tekkaguyaテッカグヤ | ['Beast Boost']     | 0.25          | 1.0            | 0.5              | 2.0                | 0.5             | 1.0             | 2.0            | ... | 797             | 107         | 101          | 61      | steel     | flying  | 999.9       | 7            | 1              | 570           |
+| 797| Kartana    | Kamiturugiカミツルギ | ['Beast Boost']     | 1.0           | 1.0            | 0.5              | 0.5                | 0.5             | 2.0             | 4.0            | ... | 798             | 59          | 31           | 109     | grass     | steel   | 0.1         | 7            | 1              | 570           |
+| 798| Guzzlord   | Akuzikingアクジキング | ['Beast Boost']     | 2.0           | 0.5            | 2.0              | 0.5                | 4.0             | 2.0             | 0.5            | ... | 799             | 97          | 53           | 43      | dark      | dragon  | 888.0       | 7            | 1              | 570           |
+| 799| Necrozma   | Necrozmaネクロズマ | ['Prism Armor']      | 2.0           | 2.0            | 1.0              | 1.0                | 1.0             | 0.5             | 1.0            | ... | 800             | 127         | 89           | 79      | psychic   | NaN     | 230.0       | 7            | 1              | 600           |
+| 800| Magearna   | Magearnaマギアナ | ['Soul-Heart']       | 0.25          | 0.5            | 0.0              | 1.0                | 0.5             | 1.0             | 2.0            | ... | 801             | 130         | 115          | 65      | steel     | fairy   | 80.5        | 7            | 1              | 600           |
+<br />
+Next, we can get an insight on the 'Base Stats' of Pokemon. The Base Stats consist of the 'hp', 'attack', 'defense', 'sp_attack', 'sp_defense', and speed of Pokemon.
+
+```
+base_stats = poke_data[['hp','attack','defense','sp_attack','sp_defense','speed']]
+base_stats.describe()
+```
+
+|          |    hp |   attack |   defense |   sp_attack |   sp_defense |   speed |
+|----------|-------|----------|-----------|-------------|--------------|---------|
+| count    | 801.0 |    801.0 |     801.0 |       801.0 |        801.0 |   801.0 |
+| mean     |  68.96|     77.86|      73.01|        71.31|         70.91|    66.33|
+| std      |  26.58|     32.16|      30.77|        32.35|         27.94|    28.91|
+| min      |   1.0 |      5.0 |       5.0 |        10.0 |         20.0 |     5.0 |
+| 25%      |  50.0 |     55.0 |      50.0 |        45.0 |         50.0 |    45.0 |
+| 50%      |  65.0 |     75.0 |      70.0 |        65.0 |         66.0 |    65.0 |
+| 75%      |  80.0 |    100.0 |      90.0 |        91.0 |         90.0 |    85.0 |
+| max      | 255.0 |    185.0 |     230.0 |       194.0 |        230.0 |   180.0 |
+
+<br />
+We can also do the same for the continous data such as height, weight, capture rate, base egg steps, experience growth, and base happiness.
+
+```
+cont_data = cont_data[['height_m', 'weight_kg', 'capture_rate', 'base_egg_steps', 'experience_growth', 'base_happiness']]
+cont_data.describe()
+```
+
+|         | height_m   | weight_kg   | base_egg_steps   | experience_growth   | base_happiness   |
+|---------|------------|-------------|-----------------|---------------------|------------------|
+| count   | 781.000000 | 781.000000  | 801.000000      | 8.010000e+02        | 801.000000       |
+| mean    | 1.163892   | 61.378105   | 7191.011236     | 1.054996e+06        | 65.362047        |
+| std     | 1.080326   | 109.354766  | 6558.220422     | 1.602558e+05        | 19.598948        |
+| min     | 0.100000   | 0.100000    | 1280.000000     | 6.000000e+05        | 0.000000         |
+| 25%     | 0.600000   | 9.000000    | 5120.000000     | 1.000000e+06        | 70.000000        |
+| 50%     | 1.000000   | 27.300000   | 5120.000000     | 1.000000e+06        | 70.000000        |
+| 75%     | 1.500000   | 64.800000   | 6400.000000     | 1.059860e+06        | 70.000000        |
+| max     | 14.500000  | 999.900000  | 30720.000000    | 1.640000e+06        | 140.000000       |
 
