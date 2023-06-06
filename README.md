@@ -4,6 +4,9 @@ Calling all Pokémon trainers and data enthusiasts! Prepare yourself for an exhi
 So, gather your Poké Balls and sharpen your analytical skills, for together, we will embark on a grand adventure, capturing the essence of Pokémon power and revealing the wonders concealed within our dataset. Are you prepared to join the ranks of the elite Pokémon researchers? Let's embark on this thrilling journey and catch 'em all!
 
 Dataset obtained from: https://www.kaggle.com/datasets/rounakbanik/pokemon
+<br />
+
+<img src = "Images/PokemonBanner.png">
 
 # PART I - Importing and Reading the Dataset
 ```
