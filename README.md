@@ -145,3 +145,133 @@ cont_data.describe()
 | 75%     | 1.500000   | 64.800000   | 6400.000000     | 1.059860e+06        | 70.000000        |
 | max     | 14.500000  | 999.900000  | 30720.000000    | 1.640000e+06        | 140.000000       |
 
+Now we will check to see if our dataset has any null values. 
+
+```
+poke_data.isnull().any()
+```
+
+| column             | null_count |
+|--------------------|------------|
+| name               | False      |
+| japanese_name      | False      |
+| abilities          | False      |
+| against_bug        | False      |
+| against_dark       | False      |
+| against_dragon     | False      |
+| against_electric   | False      |
+| against_fairy      | False      |
+| against_fight      | False      |
+| against_fire       | False      |
+| against_flying     | False      |
+| against_ghost      | False      |
+| against_grass      | False      |
+| against_ground     | False      |
+| against_ice        | False      |
+| against_normal     | False      |
+| against_poison     | False      |
+| against_psychic    | False      |
+| against_rock       | False      |
+| against_steel      | False      |
+| against_water      | False      |
+| attack             | False      |
+| base_egg_steps     | False      |
+| base_happiness     | False      |
+| base_total         | False      |
+| capture_rate       | False      |
+| classfication      | False      |
+| defense            | False      |
+| experience_growth  | False      |
+| height_m           | True       |
+| hp                 | False      |
+| percentage_male    | True       |
+| sp_attack          | False      |
+| sp_defense         | False      |
+| speed              | False      |
+| type1              | False      |
+| type2              | True       |
+| weight_kg          | True       |
+| generation         | False      |
+| is_legendary       | False      |
+
+
+We see that height_m, percentage_male, type2 and weight_kg all have null values. To gather more insight, we name the above series as NaN_column then, use .sum() function to count the instances of null values within each category. 
+
+```
+NaN_column = poke_data.isnull().any()
+poke_data.isnull().sum()[NaN_column]
+```
+| column           | null_count |
+|------------------|------------|
+| height_m         | 20         |
+| percentage_male  | 98         |
+| type2            | 384        |
+| weight_kg        | 20         |
+
+We can see that height has 20, percentage_male has 98, type2 has 384 and weight_kg has 20 null instances. To fix this, there are a few options to explore. One is calculating the mean and plugging that into the null values, or dropping them completely. For this project, I will use a combination of both. 
+
+```
+poke_data['type2'].fillna('None', inplace=True) 
+poke_data['percentage_male'].fillna('None', inplace=True)
+
+poke_data['height_m'].fillna(poke_data['height_m'].mean(), inplace=True) 
+poke_data['weight_kg'].fillna(poke_data['weight_kg'].mean(), inplace=True) 
+
+poke_data.isnull().sum() #check for null instances again
+```
+| column             | null_count |
+|--------------------|------------|
+| name               | 0          |
+| japanese_name      | 0          |
+| abilities          | 0          |
+| against_bug        | 0          |
+| against_dark       | 0          |
+| against_dragon     | 0          |
+| against_electric   | 0          |
+| against_fairy      | 0          |
+| against_fight      | 0          |
+| against_fire       | 0          |
+| against_flying     | 0          |
+| against_ghost      | 0          |
+| against_grass      | 0          |
+| against_ground     | 0          |
+| against_ice        | 0          |
+| against_normal     | 0          |
+| against_poison     | 0          |
+| against_psychic    | 0          |
+| against_rock       | 0          |
+| against_steel      | 0          |
+| against_water      | 0          |
+| attack             | 0          |
+| base_egg_steps     | 0          |
+| base_happiness     | 0          |
+| base_total         | 0          |
+| capture_rate       | 0          |
+| classfication      | 0          |
+| defense            | 0          |
+| experience_growth  | 0          |
+| height_m           | 0          |
+| hp                 | 0          |
+| percentage_male    | 0          |
+| sp_attack          | 0          |
+| sp_defense         | 0          |
+| speed              | 0          |
+| type1              | 0          |
+| type2              | 0          |
+| weight_kg          | 0          |
+| generation         | 0          |
+| is_legendary       | 0          |
+# PART III - Analyzing the Data
+1. Amount of Pokemon introduced per generation. 
+```
+# Count the number of new Pokemon introduced per generation
+generation_counts = poke_data['generation'].value_counts().sort_index()
+
+# Create a bar plot
+plt.figure(figsize=(10,6))
+sns.barplot(x=generation_counts.index, y=generation_counts.values, palette='magma')
+plt.title('Number of New Pokemon Introduced per Generation')
+plt.xlabel('Generation')
+plt.ylabel('Number of new Pokemon')
+plt.show()
+```
