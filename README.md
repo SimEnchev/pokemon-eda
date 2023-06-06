@@ -3,6 +3,8 @@ Calling all Pokémon trainers and data enthusiasts! Prepare yourself for an exhi
 
 So, gather your Poké Balls and sharpen your analytical skills, for together, we will embark on a grand adventure, capturing the essence of Pokémon power and revealing the wonders concealed within our dataset. Are you prepared to join the ranks of the elite Pokémon researchers? Let's embark on this thrilling journey and catch 'em all!
 
+Dataset obtained from: https://www.kaggle.com/datasets/rounakbanik/pokemon
+
 # PART I - Importing and Reading the Dataset
 ```
 import math
@@ -292,4 +294,277 @@ plt.ylabel('Type')
 plt.show()
 ```
 
-<img src = "Images/HeatMap.png">
+<img src = "Images/TypeHeatmap.png">
+The heatmap above displays the amount of Pokemon per type and generation. From it, we observe that the 'Water' type has the highest number pof Pokemon across all generations, followed by the 'Normal' and 'Bug' types. This suggests that this type of Pokemon is more common. On the other hand, the 'Fairy' type has the lowest amount of Pokemon, indicating its rarity. This is also partially due to the fact that Fairy type Pokemon weren't introduced until Gen. 6. We can also see that the number of Pokemon per type varies across generations, with some types having more Pokemon in certain generations.
+<br />
+<br />
+3. Primary and Secondary Type Distributions
+
+```
+import matplotlib.pyplot as plt
+
+# Define the color dictionary
+color_dict = {
+    "Grass": "#358873",
+    "Fire": "#E24D4D",
+    "Water": "#4C75B2",
+    "Bug": "#BDD358",
+    "Normal": "#A6A6A6",
+    "Poison": "#9C56B8",
+    "Electric": "#F3CA4E",
+    "Ground": "#B27350",
+    "Fairy": "#F9A6FF",
+    "Fighting": "#AE4C32",
+    "Psychic": "#F85CFF",
+    "Rock": "#A0937D",
+    "Ghost": "#6C6CB1",
+    "Ice": "#A7DCEC",
+    "Dragon": "#3D15C3",
+    "Dark": "#515151",
+    "Steel": "#8D8D8D",
+    "Flying": "#9696EF"
+}
+
+# Define the color dictionary with lowercase keys
+color_dict_lower = {k.lower(): v for k, v in color_dict.items()}
+
+type1_counts = poke_data["type1"].value_counts()
+type1_labels = type1_counts.index
+type1_percentages = (type1_counts / type1_counts.sum()) * 100
+
+type2_counts = poke_data["type2"].value_counts()
+type2_labels = type2_counts.index
+type2_percentages = (type2_counts / type2_counts.sum()) * 100
+
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 8))
+
+type1_pie = ax1.pie(type1_percentages, labels=type1_labels, autopct="%1.1f%%", startangle=180, colors=[color_dict_lower.get(t, "#000000") for t in type1_labels])
+ax1.set_title("Type 1 Distribution")
+
+type2_pie = ax2.pie(type2_percentages, labels=type2_labels, autopct="%1.1f%%", startangle=180, colors=[color_dict_lower.get(t, "#000000") for t in type2_labels])
+ax2.set_title("Type 2 Distribution")
+
+legend_elements = [plt.Line2D([0], [0], marker="o", color="w", label=t, markerfacecolor=color_dict_lower.get(t, "#000000")) for t in type1_labels]
+ax2.legend(handles=legend_elements, title="Type-Color Mapping", loc="center left", bbox_to_anchor=(1, 0.5))
+
+plt.tight_layout()
+
+plt.show()
+```
+<img src = "Images/PokemonPie.png">
+
+4. Correlational Statistics Between Speed and Other Base Stats. 
+```
+plt.scatter(poke_data["speed"], poke_data["attack"])
+plt.xlabel("Base Speed")
+plt.ylabel("Base Attack")
+plt.title("Base Speed vs. Base Attack of Pokemon")
+plt.show()
+
+plt.scatter(poke_data["speed"], poke_data["defense"])
+plt.xlabel("Base Speed")
+plt.ylabel("Base Defense")
+plt.title("Base Speed vs. Base Defense of Pokemon")
+plt.show()
+
+plt.scatter(poke_data["speed"], poke_data["height_m"])
+plt.xlabel("Base Speed")
+plt.ylabel("Height (m)")
+plt.title("Base Speed vs. Height of Pokemon")
+plt.show()
+
+plt.scatter(poke_data["speed"], poke_data["weight_kg"])
+plt.xlabel("Base Speed")
+plt.ylabel("Weight (kg)")
+plt.title("Base Speed vs. Weight of Pokemon")
+plt.show()
+```
+
+<img src = "Images/SpeedVSAttack.png">
+<img src = "Images/SpeedVSDefense.png">
+<img src = "Images/SpeedVSHeight.png">
+<img src = "Images/SpeedVSWeight.png">
+
+The scatter plots above display the relationships between the base speed of Pokemon and their base attack, base defense, height, and weight. 
+<br />
+<br />
+Base Speed vs. Base Attack: There seems to be a positive correlation between base speed and base attack. This suggests that Pokemon with higher speed tend to have higher attack, which could be due to the fact that faster Pokemon can attack more frequently.
+<br />
+<br />
+Base Speed vs. Base Defense: There doesn't seem to be a clear correlation between base speed and base defense. This suggests that these two attributes are independent of each other.
+<br />
+<br />
+Base Speed vs. Height: There doesn't seem to be a clear correlation between base speed and height. This suggests that a Pokemon's speed is not necessarily affected by its height.
+<br />
+<br />
+Base Speed vs. Weight: There seems to be a slight negative correlation between base speed and weight. This suggests that heavier Pokemon tend to be slower, which could be due to the fact that heavier Pokemon may require more energy to move quickly.
+<br />
+<br />
+5. Average Total Power Per Type & Dream 6
+
+```
+# Calculate the total power for each type
+poke_data['total_power'] = poke_data[['hp', 'attack', 'defense', 'sp_attack', 'sp_defense', 'speed']].sum(axis=1)
+type_power = poke_data.groupby('type1')['total_power'].mean().sort_values(ascending=False)
+
+plt.figure(figsize=(14,8))
+sns.barplot(x=type_power.index, y=type_power.values, palette='magma')
+plt.title('Average Total Power by Type')
+plt.xlabel('Type')
+plt.ylabel('Average Total Power')
+plt.xticks(rotation=90)
+plt.show()
+
+sorted_data = poke_data.sort_values(by='total_power', ascending=False)
+
+dream_team = []
+
+types = set()
+
+# Iterate over the sorted dataframe
+for _, row in sorted_data.iterrows():
+    # If the dream team already has 6 Pokemon, break the loop
+    if len(dream_team) == 6:
+        break
+    # If the Pokemon's type1 or type2 is not in the types set, add the Pokemon to the dream team and add its types to the types set
+    if row['type1'] not in types or (pd.notnull(row['type2']) and row['type2'] not in types):
+        dream_team.append(row['name'])
+        types.add(row['type1'])
+        if pd.notnull(row['type2']):
+            types.add(row['type2'])
+
+
+dream_team
+```
+<img src = "Images/PowerPerType.png">
+['Mewtwo', 'Rayquaza', 'Groudon', 'Kyogre', 'Arceus', 'Tyranitar']
+<br />
+<br />
+The bar chart displays Dragon type Pokemon as the most powerful on average, while Bug type Pokemon are the weakest. I have also generated a Dream 6 team containing the most powerful Pokemon, however impractical that may be in a real game. 
+<br />
+<br />
+
+6. Top Pokemon by Base Stats
+```
+top_defense = poke_data.nlargest(10, 'defense')[['name', 'type1', 'type2', 'defense', 'base_total', 'is_legendary']]
+
+top_attack = poke_data.nlargest(10, 'attack')[['name', 'type1', 'type2', 'attack', 'base_total', 'is_legendary']]
+
+top_sp_defense = poke_data.nlargest(10, 'sp_defense')[['name', 'type1', 'type2', 'sp_defense', 'base_total', 'is_legendary']]
+
+top_sp_attack = poke_data.nlargest(10, 'sp_attack')[['name', 'type1', 'type2', 'sp_attack', 'base_total', 'is_legendary']]
+```
+Top 10 Pokemon by Defense:
+| pokedex_number | name       | type1  | type2   | defense | base_total | is_legendary |
+|----------------|------------|--------|---------|---------|------------|--------------|
+| 208            | Steelix    | steel  | ground  | 230     | 610        | 0            |
+| 213            | Shuckle    | bug    | rock    | 230     | 505        | 0            |
+| 306            | Aggron     | steel  | rock    | 230     | 630        | 0            |
+| 377            | Regirock   | rock   | None    | 200     | 580        | 1            |
+| 713            | Avalugg    | ice    | None    | 184     | 514        | 0            |
+| 80             | Slowbro    | water  | psychic | 180     | 590        | 0            |
+| 91             | Cloyster   | water  | ice     | 180     | 525        | 0            |
+| 411            | Bastiodon  | rock   | steel   | 168     | 495        | 0            |
+| 95             | Onix       | rock   | ground  | 160     | 385        | 0            |
+| 383            | Groudon    | ground | None    | 160     | 770        | 1            |
+
+<br />
+<br />
+
+Top 10 Pokemon by Attack:
+| pokedex_number | name       | type1  | type2    | attack | base_total | is_legendary |
+|----------------|------------|--------|----------|--------|------------|--------------|
+| 214            | Heracross  | bug    | fighting | 185    | 600        | 0            |
+| 798            | Kartana    | grass  | steel    | 181    | 570        | 1            |
+| 383            | Groudon    | ground | None     | 180    | 770        | 1            |
+| 384            | Rayquaza   | dragon | flying   | 180    | 780        | 1            |
+| 445            | Garchomp   | dragon | ground   | 170    | 700        | 0            |
+| 354            | Banette    | ghost  | None     | 165    | 555        | 0            |
+| 409            | Rampardos  | rock   | None     | 165    | 495        | 0            |
+| 475            | Gallade    | psychic| fighting | 165    | 618        | 0            |
+| 248            | Tyranitar  | rock   | dark     | 164    | 700        | 0            |
+| 257            | Blaziken   | fire   | fighting | 160    | 630        | 0            |
+
+<br />
+<br />
+
+Top 10 Pokemon by Special Defense:
+| pokedex_number | name       | type1   | type2   | sp_defense | base_total | is_legendary |
+|----------------|------------|---------|---------|------------|------------|--------------|
+| 213            | Shuckle    | bug     | rock    | 230        | 505        | 0            |
+| 378            | Regice     | ice     | None    | 200        | 580        | 1            |
+| 382            | Kyogre     | water   | None    | 160        | 770        | 1            |
+| 249            | Lugia      | psychic | flying  | 154        | 680        | 1            |
+| 250            | Ho-Oh      | fire    | flying  | 154        | 680        | 1            |
+| 671            | Florges    | fairy   | None    | 154        | 552        | 0            |
+| 379            | Registeel  | steel   | None    | 150        | 580        | 1            |
+| 380            | Latias     | dragon  | psychic | 150        | 700        | 1            |
+| 476            | Probopass  | rock    | steel   | 150        | 525        | 0            |
+| 703            | Carbink    | rock    | fairy   | 150        | 500        | 0            |
+
+<br />
+<br />
+
+Top 10 Pokemon by Special Attack:
+| pokedex_number | name      | type1   | type2   | sp_attack | base_total | is_legendary |
+|----------------|-----------|---------|---------|-----------|------------|--------------|
+| 150            | Mewtwo    | psychic | None    | 194       | 780        | 1            |
+| 382            | Kyogre    | water   | None    | 180       | 770        | 1            |
+| 384            | Rayquaza  | dragon  | flying  | 180       | 780        | 1            |
+| 65             | Alakazam  | psychic | None    | 175       | 600        | 0            |
+| 796            | Xurkitree | electric| None    | 173       | 570        | 1            |
+| 94             | Gengar    | ghost   | poison  | 170       | 600        | 0            |
+| 646            | Kyurem    | dragon  | ice     | 170       | 700        | 1            |
+| 720            | Hoopa     | psychic | ghost   | 170       | 680        | 1            |
+| 181            | Ampharos  | electric| None    | 165       | 610        | 0            |
+| 282            | Gardevoir | psychic | fairy   | 165       | 618        | 0            |
+
+<br />
+<br />
+
+7. Pokemon Radar Chart for Clefairy, Gengar, Lucario, Mewtwo
+```
+import math
+import matplotlib.pyplot as plt
+import pandas as pd
+
+poke_data = pd.read_csv('pokemon.csv')
+
+def create_radar_chart(pokemon_name):
+    pokemon = poke_data[poke_data['name'] == pokemon_name]
+    properties = ['defense', 'attack', 'sp_attack', 'sp_defense', 'hp', 'speed']
+
+    # Get the values of the properties for the Pokemon
+    values = pokemon[properties].values.flatten().tolist()
+    values += values[:1]  # repeat the first value to close the circular graph
+
+    # Calculate the angle of each axis in the plot
+    num_vars = len(properties)
+    angles = [n / float(num_vars) * 2 * math.pi for n in range(num_vars)]
+    angles += angles[:1]
+
+    plt.figure(figsize=(6, 6))
+    ax = plt.subplot(111, polar=True)
+
+    plt.xticks(angles[:-1], properties, color='grey', size=8)
+
+    ax.set_rlabel_position(0)
+    plt.yticks([50, 100, 150], ['50', '100', '150'], color='grey', size=7)
+    plt.ylim(0, 160)
+
+    ax.plot(angles, values, linewidth=1, linestyle='solid')
+
+    ax.fill(angles, values, 'b', alpha=0.1)
+
+    plt.title(pokemon_name)
+    plt.show()
+
+for pokemon in ['Clefairy', 'Gengar', 'Lucario', 'Mewtwo']:
+    create_radar_chart(pokemon)
+```
+<img src = "Images/Clefairy.png">
+<img src = "Images/Gengar.png">
+<img src = "Images/Lucario.png">
+<img src = "Images/MewTwo.png">
+
+From the charts, we can observe that each Pokemon has a unique distribution of stats. For example, 'Mewtwo' has high stats in all areas, particularly in special attack, indicating that it is a powerful Pokemon in battles. On the other hand, 'Clefairy' has lower stats in general, but it has a relatively high HP, suggesting that it is a durable Pokemon. This shows that different Pokemon have their own strengths and weaknesses, and players may need to choose their Pokemon based on the specific stats they value.
