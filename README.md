@@ -571,3 +571,18 @@ for pokemon in ['Clefairy', 'Gengar', 'Lucario', 'Mewtwo']:
 <img src = "Images/MewTwo.png">
 
 From the charts, we can observe that each Pokemon has a unique distribution of stats. For example, 'Mewtwo' has high stats in all areas, particularly in special attack, indicating that it is a powerful Pokemon in battles. On the other hand, 'Clefairy' has lower stats in general, but it has a relatively high HP, suggesting that it is a durable Pokemon. This shows that different Pokemon have their own strengths and weaknesses, and players may need to choose their Pokemon based on the specific stats they value.
+<br />
+<br />
+8. Capture Rate by Type
+```
+type_capture_rate = poke_data.groupby('type1')['capture_rate'].mean().sort_values(ascending=False)
+
+plt.figure(figsize=(14,8))
+sns.barplot(x=type_capture_rate.index, y=type_capture_rate.values, palette='magma')
+plt.title('Average Capture Rate by Type')
+plt.xlabel('Type')
+plt.ylabel('Average Capture Rate')
+plt.xticks(rotation=90)
+plt.show()
+```
+<img src = "Images/CaptureRate.png">
