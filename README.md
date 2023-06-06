@@ -28,46 +28,58 @@ poke_data.shape
 ```
 poke_data.info()
 ```
+| #   | Column             | Non-Null Count | Dtype   |
+| --- | ------------------ | -------------- | ------- |
+| 0   | abilities          | 801            | object  |
+| 1   | against_bug        | 801            | float64 |
+| 2   | against_dark       | 801            | float64 |
+| 3   | against_dragon     | 801            | float64 |
+| 4   | against_electric   | 801            | float64 |
+| 5   | against_fairy      | 801            | float64 |
+| 6   | against_fight      | 801            | float64 |
+| 7   | against_fire       | 801            | float64 |
+| 8   | against_flying     | 801            | float64 |
+| 9   | against_ghost      | 801            | float64 |
+| 10  | against_grass      | 801            | float64 |
+| 11  | against_ground     | 801            | float64 |
+| 12  | against_ice        | 801            | float64 |
+| 13  | against_normal     | 801            | float64 |
+| 14  | against_poison     | 801            | float64 |
+| 15  | against_psychic    | 801            | float64 |
+| 16  | against_rock       | 801            | float64 |
+| 17  | against_steel      | 801            | float64 |
+| 18  | against_water      | 801            | float64 |
+| 19  | attack             | 801            | int64   |
+| 20  | base_egg_steps     | 801            | int64   |
+| 21  | base_happiness     | 801            | int64   |
+| 22  | base_total         | 801            | int64   |
+| 23  | capture_rate       | 801            | object  |
+| 24  | classfication      | 801            | object  |
+| 25  | defense            | 801            | int64   |
+| 26  | experience_growth  | 801            | int64   |
+| 27  | height_m           | 781            | float64 |
+| 28  | hp                 | 801            | int64   |
+| 29  | japanese_name      | 801            | object  |
+| 30  | name               | 801            | object  |
+| 31  | percentage_male    | 703            | float64 |
+| 32  | sp_attack          | 801            | int64   |
+| 33  | sp_defense         | 801            | int64   |
+| 34  | speed              | 801            | int64   |
+| 35  | type1              | 801            | object  |
+| 36  | type2              | 417            | object  |
+| 37  | weight_kg          | 781            | float64 |
+| 38  | generation         | 801            | int64   |
+| 39  | is_legendary       | 801            | int64   |
+<br />
+<br />
+The biggest issue with this table is that the first column of the DataFrame is not the name of a Pokemon, but its abilities. While not entirely necessary, setting the first column to be the name of a Pokemon allows for much better readability. In addition, the Japanese names of the Pokemon can also be displayed next to the English name. The following code addresses this:
 
-| Column             | Non-Null Count | Dtype   |
-| ------------------ | -------------- | ------- |
-| abilities          | 801            | object  |
-| against_bug        | 801            | float64 |
-| against_dark       | 801            | float64 |
-| against_dragon     | 801            | float64 |
-| against_electric   | 801            | float64 |
-| against_fairy      | 801            | float64 |
-| against_fight      | 801            | float64 |
-| against_fire       | 801            | float64 |
-| against_flying     | 801            | float64 |
-| against_ghost      | 801            | float64 |
-| against_grass      | 801            | float64 |
-| against_ground     | 801            | float64 |
-| against_ice        | 801            | float64 |
-| against_normal     | 801            | float64 |
-| against_poison     | 801            | float64 |
-| against_psychic    | 801            | float64 |
-| against_rock       | 801            | float64 |
-| against_steel      | 801            | float64 |
-| against_water      | 801            | float64 |
-| attack             | 801            | int64   |
-| base_egg_steps     | 801            | int64   |
-| base_happiness     | 801            | int64   |
-| base_total         | 801            | int64   |
-| capture_rate       | 801            | object  |
-| classfication      | 801            | object  |
-| defense            | 801            | int64   |
-| experience_growth  | 801            | int64   |
-| height_m           | 781            | float64 |
-| hp                 | 801            | int64   |
-| japanese_name      | 801            | object  |
-| name               | 801            | object  |
-| percentage_male    | 703            | float64 |
-| sp_attack          | 801            | int64   |
-| sp_defense         | 801            | int64   |
-| speed              | 801            | int64   |
-| type1              | 801            | object  |
-| type2              | 417            | object  |
-| weight_kg          | 781            | float64 |
-| generation         | 801            | int64   |
-| is_legendary       | 801            | int64   |
+<br />
+<br />
+
+```
+poke_name = poke_data.pop('name')
+poke_data.insert(0,'name',poke_name)
+poke_data.insert(1,'japanese_name',poke_data.pop('japanese_name'))
+poke_data.head(20)
+```
