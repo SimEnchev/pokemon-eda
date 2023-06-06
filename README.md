@@ -13,10 +13,12 @@ Dataset obtained from: https://www.kaggle.com/datasets/rounakbanik/pokemon
 import math
 import numpy as np
 import pandas as pd 
+
 import matplotlib  
-pd.plotting.register_matplotlib_converters()
 import matplotlib.pyplot as plt
 %matplotlib inline
+pd.plotting.register_matplotlib_converters()
+
 import seaborn as sns
 ```
 ```
