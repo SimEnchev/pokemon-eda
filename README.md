@@ -71,15 +71,33 @@ poke_data.info()
 | 38  | generation         | 801            | int64   |
 | 39  | is_legendary       | 801            | int64   |
 <br />
-<br />
-The biggest issue with this table is that the first column of the DataFrame is not the name of a Pokemon, but its abilities. While not entirely necessary, setting the first column to be the name of a Pokemon allows for much better readability. In addition, the Japanese names of the Pokemon can also be displayed next to the English name. The following code addresses this:
 
-<br />
+The biggest issue with this table is that the first column of the DataFrame is not the name of a Pokemon, but its abilities. While not entirely necessary, setting the first column to be the name of a Pokemon allows for much better readability. In addition, the Japanese names of the Pokemon can also be displayed next to the English name. The following code addresses this:
 <br />
 
 ```
 poke_name = poke_data.pop('name')
 poke_data.insert(0,'name',poke_name)
+
 poke_data.insert(1,'japanese_name',poke_data.pop('japanese_name'))
-poke_data.head(20)
+poke_data.head(11)
 ```
+|   | name       | japanese_name       | abilities                    | against_bug | against_dark | against_dragon | against_electric | against_fairy | against_fight | against_fire | ... | pokedex_number | sp_attack | sp_defense | speed | type1 | type2 | weight_kg | generation | is_legendary | total_power |
+|---|------------|---------------------|------------------------------|-------------|--------------|----------------|------------------|----------------|---------------|--------------|-----|----------------|-----------|-------------|-------|-------|-------|-----------|------------|--------------|-------------|
+| 0 | Bulbasaur  | Fushigidaneフシギダネ  | ['Overgrow', 'Chlorophyll'] | 1.00        | 1.0          | 1.0            | 0.5              | 0.5            | 0.5           | 2.0          | ... | 1              | 65        | 65          | 45    | grass | poison | 6.9       | 1          | 0            | 318         |
+| 1 | Ivysaur    | Fushigisouフシギソウ   | ['Overgrow', 'Chlorophyll'] | 1.00        | 1.0          | 1.0            | 0.5              | 0.5            | 0.5           | 2.0          | ... | 2              | 80        | 80          | 60    | grass | poison | 13.0      | 1          | 0            | 405         |
+| 2 | Venusaur   | Fushigibanaフシギバナ   | ['Overgrow', 'Chlorophyll'] | 1.00        | 1.0          | 1.0            | 0.5              | 0.5            | 0.5           | 2.0          | ... | 3              | 122       | 120         | 80    | grass | poison | 100.0     | 1          | 0            | 625         |
+| 3 | Charmander | Hitokageヒトカゲ       | ['Blaze', 'Solar Power']    | 0.50        | 1.0          | 1.0            | 1.0              | 0.5            | 1.0           | 0.5          | ... | 4              | 60        | 50          | 65    | fire  | NaN    | 8.5       | 1          | 0            | 309         |
+| 4 | Charmeleon | Lizardoリザード        | ['Blaze', 'Solar Power']    | 0.50        | 1.0          | 1.0            | 1.0              | 0.5            | 1.0           | 0.5          | ... | 5              | 80        | 65          | 80    | fire  | NaN    | 19.0      | 1          | 0            | 405         |
+| 5 | Charizard  | Lizardonリザードン     | ['Blaze', 'Solar Power']    | 0.25        | 1.0          | 1.0            | 2.0              | 0.5            | 0.5           | 0.5          | ... | 6              | 159       | 115         | 100   | fire  | flying | 90.5      | 1          | 0            | 634         |
+| 6 | Squirtle   | Zenigameゼニガメ       | ['Torrent', 'Rain Dish']    | 1.00        | 1.0          | 1.0            | 2.0              | 1.0            | 1.0           | 0.5          | ... | 7              | 50        | 64          | 43    | water | NaN    | 9.0       | 1          | 0            | 314         |
+| 7 | Wartortle  | Kameilカメール         | ['Torrent', 'Rain Dish']    | 1.00        | 1.0          | 1.0            | 2.0              | 1.0            | 1.0           | 0.5          | ... | 8              | 65        | 80          | 58    | water | NaN    | 22.5      | 1          | 0            | 405         |
+| 8 | Blastoise  | Kamexカメックス         | ['Torrent', 'Rain Dish']    | 1.00        | 1.0          | 1.0            | 2.0              | 1.0            | 1.0           | 0.5          | ... | 9              | 135       | 115         | 78    | water | NaN    | 85.5      | 1          | 0            | 630         |
+| 9 | Caterpie   | Caterpieキャタピー       | ['Shield Dust', 'Run Away'] | 1.00        | 1.0          | 1.0            | 1.0              | 1.0            | 0.5           | 2.0          | ... | 10             | 20        | 20          | 45    | bug   | NaN    | 2.9       | 1          | 0            | 195         |
+|10 | Metapod    | Transelトランセル       | ['Shed Skin']               | 1.00        | 1.0          | 1.0            | 1.0              | 1.0            | 0.5           | 2.0          | ... | 11             | 25        | 25          | 30    | bug   | NaN    | 9.9       | 1          | 0            | 205         |
+
+
+```
+poke_data.tail(5)
+```
+
