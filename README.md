@@ -263,11 +263,10 @@ poke_data.isnull().sum() #check for null instances again
 | is_legendary       | 0          |
 # PART III - Analyzing the Data
 1. Amount of Pokemon introduced per generation. 
+
 ```
-# Count the number of new Pokemon introduced per generation
 generation_counts = poke_data['generation'].value_counts().sort_index()
 
-# Create a bar plot
 plt.figure(figsize=(10,6))
 sns.barplot(x=generation_counts.index, y=generation_counts.values, palette='magma')
 plt.title('Number of New Pokemon Introduced per Generation')
@@ -275,3 +274,22 @@ plt.xlabel('Generation')
 plt.ylabel('Number of new Pokemon')
 plt.show()
 ```
+
+<img src = "Images/NewPerGen.png">
+
+As we can observe, the generation with the most Pokemon introduced is 5. 
+
+2. Amount of Pokemon per type per generation. 
+
+```
+type_generation_counts = poke_data.pivot_table(index='type1', columns='generation', aggfunc='size', fill_value=0)
+
+plt.figure(figsize=(10, 8))
+sns.heatmap(type_generation_counts, cmap='RdPu', annot=True, fmt='d')
+plt.title('Number of Pokemon per Type and Generation')
+plt.xlabel('Generation')
+plt.ylabel('Type')
+plt.show()
+```
+
+<img src = "Images/HeatMap.png">
